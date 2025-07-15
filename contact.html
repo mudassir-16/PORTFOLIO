@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Mohammed Mudassir</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #000;
+        }
+
+        #vanta-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 150px 0 80px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .page-header p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 50px 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .contact-card-3d {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(30px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .contact-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .contact-card-3d h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .contact-card-3d p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        .contact-card-3d a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .contact-card-3d a:hover {
+            color: #fff;
+        }
+
+        /* Social Media Colors */
+        .linkedin { color: #0077b5; }
+        .instagram { color: #e4405f; }
+        .github { color: #333; }
+        .email { color: #d44638; }
+        .hackerrank { color: #2ec866; }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 3rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background -->
+    <div id="vanta-bg"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">Mohammed Mudassir</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="skills.html">Skills</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Get In Touch</h1>
+            <p>Let's connect and collaborate</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- LinkedIn -->
+                <div class="contact-card-3d fade-in">
+                    <i class="fab fa-linkedin contact-icon linkedin"></i>
+                    <h3>LinkedIn</h3>
+                    <p>Connect with me professionally</p>
+                    <a href="https://www.linkedin.com/in/mohammed-mudassir-82882933a/" target="_blank">View Profile</a>
+                </div>
+
+                <!-- Instagram -->
+                <div class="contact-card-3d fade-in">
+                    <i class="fab fa-instagram contact-icon instagram"></i>
+                    <h3>Instagram</h3>
+                    <p>Follow my journey</p>
+                    <a href="https://www.instagram.com/mudassir.1604/" target="_blank">Follow Me</a>
+                </div>
+
+                <!-- GitHub -->
+                <div class="contact-card-3d fade-in">
+                    <i class="fab fa-github contact-icon github"></i>
+                    <h3>GitHub</h3>
+                    <p>Check out my code</p>
+                    <a href="https://github.com/mudassir-16" target="_blank">View Repositories</a>
+                </div>
+
+                <!-- Email -->
+                <div class="contact-card-3d fade-in">
+                    <i class="fas fa-envelope contact-icon email"></i>
+                    <h3>Email</h3>
+                    <p>Drop me a message</p>
+                    <a href="mailto:@mohammadmudassir1604@gmail.com">Send Email</a>
+                </div>
+
+                <!-- HackerRank -->
+                <div class="contact-card-3d fade-in">
+                    <i class="fab fa-hackerrank contact-icon hackerrank"></i>
+                    <h3>HackerRank</h3>
+                    <p>View my coding skills</p>
+                    <a href="https://hackerrank.com/yourusername" target="_blank">View Profile</a>
+                </div>
+
+                <div class="contact-card-3d fade-in">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <h3>Phone</h3>
+                    <p>+91 6281192287</p>
+                    <a href="tel:+916281192287">Call Now</a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div style="margin-top: 60px;">
+                <form id="contact-form" style="max-width: 500px; margin: 0 auto; background: rgba(255,255,255,0.07); padding: 30px; border-radius: 20px; box-shadow: 0 4px 24px rgba(102,126,234,0.1);">
+                    <h2 style="color: #667eea; text-align: center; margin-bottom: 20px;">Contact Form</h2>
+                    <div style="margin-bottom: 18px;">
+                        <label for="name" style="display:block; margin-bottom: 6px;">Name</label>
+                        <input type="text" id="name" name="name" required style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div style="margin-bottom: 18px;">
+                        <label for="email" style="display:block; margin-bottom: 6px;">Email</label>
+                        <input type="email" id="email" name="email" required style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div style="margin-bottom: 18px;">
+                        <label for="message" style="display:block; margin-bottom: 6px;">Message</label>
+                        <textarea id="message" name="message" required rows="4" style="width:100%; padding:10px; border-radius:8px; border:none;"></textarea>
+                    </div>
+                    <button type="submit" style="background:linear-gradient(45deg,#667eea,#764ba2); color:white; padding:12px 30px; border:none; border-radius:8px; font-size:1rem; font-weight:bold; cursor:pointer; width:100%;">Send</button>
+                    <div id="form-status" style="margin-top:15px; text-align:center;"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Mohammed Mudassir. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Vanta.js 3D background
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x667eea,
+            backgroundColor: 0x0,
+            points: 10.00,
+            maxDistance: 25.00,
+            spacing: 18.00
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contact form submit handler
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const statusDiv = document.getElementById('form-status');
+            statusDiv.textContent = 'Sending...';
+            fetch('http://localhost:5000/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                statusDiv.textContent = data.message || 'Form submit ho gaya!';
+                statusDiv.style.color = '#28a745';
+                document.getElementById('contact-form').reset();
+            })
+            .catch(err => {
+                statusDiv.textContent = 'Form submit nahi hua!';
+                statusDiv.style.color = '#d44638';
+            });
+        });
+    </script>
+</body>
+</html>
