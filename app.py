@@ -13,8 +13,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Use environment variables for sensitive data
-EMAIL_ADDRESS = os.getenv("EMAIL_USER")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASS")
+EMAIL_ADDRESS = os.getenv("mohammadmudassir1604@gmail.com")
+EMAIL_PASSWORD = os.getenv("erpz bdxn zxzh phue")
 
 @app.route('/contact', methods=['POST'])
 def contact():
