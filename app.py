@@ -3,13 +3,18 @@ from flask_cors import CORS
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file (optional)
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# Apna email aur app password yahan daalein
-EMAIL_ADDRESS = "mohammadmudassir1604@gmail.com"
-EMAIL_PASSWORD = "erpz bdxn zxzh phue"
+# Use environment variables for sensitive data
+EMAIL_ADDRESS = os.getenv("EMAIL_USER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASS")
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -21,11 +26,12 @@ def contact():
     email = data.get('email')
     message = data.get('message')
 
-    # Email ka content
+    if not name or not email or not message:
+        return jsonify({"error": "Missing name, email, or message"}), 400
+
     subject = f"New Contact Form Submission from {name}"
     body = f"Name: {name}\nEmail: {email}\nMessage:\n{message}"
 
-    # Email setup
     msg = MIMEMultipart()
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = EMAIL_ADDRESS
@@ -38,8 +44,8 @@ def contact():
             server.sendmail(EMAIL_ADDRESS, EMAIL_ADDRESS, msg.as_string())
         return jsonify({"message": "Message successfully sent!"}), 200
     except Exception as e:
-        print("Email send error:", e)
-        return jsonify({"error": "Message send nahi hua!"}), 500
+        print("Email send error:", str(e))
+        return jsonify({"error": "Failed to send message."}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
